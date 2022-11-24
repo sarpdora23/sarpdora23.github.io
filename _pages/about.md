@@ -2,7 +2,7 @@
 layout: page
 title: About
 permalink: /about
-comments: true
+comments: false
 ---
 
 <div class="row justify-content-between">
@@ -10,6 +10,5 @@ comments: true
 
 <h2>STILL DEVELOPMENT....</h2>
 
-</div>
 </div>
 </div>
