@@ -5,9 +5,147 @@
     <description>Sinameki Sarp&apos;s CTF Writeups and blogposts...</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 27 Nov 2022 21:58:48 +0300</pubDate>
-    <lastBuildDate>Sun, 27 Nov 2022 21:58:48 +0300</lastBuildDate>
+    <pubDate>Mon, 05 Dec 2022 23:27:33 +0300</pubDate>
+    <lastBuildDate>Mon, 05 Dec 2022 23:27:33 +0300</lastBuildDate>
     <generator>Jekyll v4.3.1</generator>
+    
+      <item>
+        <title>TryHackMe: Daily Bugle CTF Writeup</title>
+        <description>&lt;p&gt;TryHackMe hard level linux machine Daily Bugle boot2root walkthrough.&lt;/p&gt;
+
+&lt;h2 id=&quot;discoverypart&quot;&gt;DiscoveryPart&lt;/h2&gt;
+
+&lt;p&gt;Start with port scan with Nmap tool.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;nmap &lt;span class=&quot;nt&quot;&gt;-sC&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-sC&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-p-&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-vv&lt;/span&gt; 10.10.4.252
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;../assets/images/TryHackMe%20Daily-Bugle%20Writeup%2061677ca18463452e976210f1c3912efd/Untitled.png&quot; alt=&quot;Untitled&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Server has a &lt;strong&gt;ssh service&lt;/strong&gt;,&lt;strong&gt;web service&lt;/strong&gt; and &lt;strong&gt;database service&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;Let’s go to web page.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;../assets/images/TryHackMe%20Daily-Bugle%20Writeup%2061677ca18463452e976210f1c3912efd/Untitled%201.png&quot; alt=&quot;Untitled&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Try to find directory and files with &lt;strong&gt;gobuster&lt;/strong&gt; tool.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;gobuster &lt;span class=&quot;nb&quot;&gt;dir&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-u&lt;/span&gt; http://10.10.4.252/  &lt;span class=&quot;nt&quot;&gt;-w&lt;/span&gt; /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt &lt;span class=&quot;nt&quot;&gt;-t&lt;/span&gt; 100 &lt;span class=&quot;nt&quot;&gt;-x&lt;/span&gt; php,txt,html
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;../assets/images/TryHackMe%20Daily-Bugle%20Writeup%2061677ca18463452e976210f1c3912efd/Untitled%202.png&quot; alt=&quot;Untitled&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;There are some interesting directories and files. Continue with README.txt file.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;../assets/images/TryHackMe%20Daily-Bugle%20Writeup%2061677ca18463452e976210f1c3912efd/Untitled%203.png&quot; alt=&quot;Untitled&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;This web page made with “&lt;strong&gt;Joomla 3.7 version&lt;/strong&gt;”. Search Google to find any vulnerability for the version.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;../assets/images/TryHackMe%20Daily-Bugle%20Writeup%2061677ca18463452e976210f1c3912efd/Untitled%204.png&quot; alt=&quot;Untitled&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Looks like the version has “SQL Injection” vulnerability and there is how can we exploit.&lt;/p&gt;
+
+&lt;h2 id=&quot;enumeration-part&quot;&gt;Enumeration Part&lt;/h2&gt;
+
+&lt;p&gt;Let’s enumerate with &lt;strong&gt;sqlmap&lt;/strong&gt; tool.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;sqlmap &lt;span class=&quot;nt&quot;&gt;-u&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;http://10.10.4.252/index.php?option=com_fields&amp;amp;view=fields&amp;amp;layout=modal&amp;amp;list[fullordering]=updatexml&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--risk&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;3 &lt;span class=&quot;nt&quot;&gt;--level&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;5 &lt;span class=&quot;nt&quot;&gt;--random-agent&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--dbs&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-p&lt;/span&gt; list[fullordering]
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;../assets/images/TryHackMe%20Daily-Bugle%20Writeup%2061677ca18463452e976210f1c3912efd/Untitled%205.png&quot; alt=&quot;Untitled&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Continue with “&lt;strong&gt;joomla”&lt;/strong&gt; database and extract tables.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;../assets/images/TryHackMe%20Daily-Bugle%20Writeup%2061677ca18463452e976210f1c3912efd/Untitled%206.png&quot; alt=&quot;Untitled&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Continue with “&lt;strong&gt;#_users&lt;/strong&gt;” table and extract columns.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;../assets/images/TryHackMe%20Daily-Bugle%20Writeup%2061677ca18463452e976210f1c3912efd/Untitled%207.png&quot; alt=&quot;Untitled&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Sqlmap&lt;/strong&gt; find “&lt;strong&gt;id,name,username,email,password&lt;/strong&gt;” columns so we don’t have to wait finish the process.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;../assets/images/TryHackMe%20Daily-Bugle%20Writeup%2061677ca18463452e976210f1c3912efd/Untitled%208.png&quot; alt=&quot;Untitled&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;We found username and password’s hash. Let’s continue with crack hash. I will use “&lt;strong&gt;JohnTheRipper&lt;/strong&gt;” tool.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;john &lt;span class=&quot;nb&quot;&gt;hash&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--wordlist&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;/usr/share/wordlists/rockyou.txt
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;strong&gt;Crack the hash can be take long time than expected so don’t cancel the procces until finish!&lt;/strong&gt;&lt;/p&gt;
+
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;img src=&quot;../assets/images/TryHackMe%20Daily-Bugle%20Writeup%2061677ca18463452e976210f1c3912efd/Untitled%209.png&quot; alt=&quot;Untitled&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Try to login Joomla admin panel with these credentials.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;../assets/images/TryHackMe%20Daily-Bugle%20Writeup%2061677ca18463452e976210f1c3912efd/Untitled%2010.png&quot; alt=&quot;Untitled&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;../assets/images/TryHackMe%20Daily-Bugle%20Writeup%2061677ca18463452e976210f1c3912efd/Untitled%2011.png&quot; alt=&quot;Untitled&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Let’s get the shell. First go to template section. Select one of the templates then select and change one of the php file to your reverse shell code. Press preview template button.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;../assets/images/TryHackMe%20Daily-Bugle%20Writeup%2061677ca18463452e976210f1c3912efd/Untitled%2012.png&quot; alt=&quot;Untitled&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;I spawned tty shell with python.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;../assets/images/TryHackMe%20Daily-Bugle%20Writeup%2061677ca18463452e976210f1c3912efd/Untitled%2013.png&quot; alt=&quot;Untitled&quot; /&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;python &lt;span class=&quot;nt&quot;&gt;-c&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&apos;import pty;pty.spawn(&quot;/bin/bash&quot;)&apos;&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;I went to home directory to check users&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;../assets/images/TryHackMe%20Daily-Bugle%20Writeup%2061677ca18463452e976210f1c3912efd/Untitled%2014.png&quot; alt=&quot;Untitled&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;There is one user but we don’t have permission to go &lt;strong&gt;jjameson&lt;/strong&gt; directory. I went to &lt;strong&gt;/var/www/html&lt;/strong&gt; directory to find any config file.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;../assets/images/TryHackMe%20Daily-Bugle%20Writeup%2061677ca18463452e976210f1c3912efd/Untitled%2015.png&quot; alt=&quot;Untitled&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Read &lt;strong&gt;configuration.php&lt;/strong&gt; file.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;../assets/images/TryHackMe%20Daily-Bugle%20Writeup%2061677ca18463452e976210f1c3912efd/Untitled%2016.png&quot; alt=&quot;Untitled&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Let’s try to use password for &lt;strong&gt;jjameson&lt;/strong&gt; user.&lt;/p&gt;
+
+&lt;h2 id=&quot;privilege-escalation-part&quot;&gt;Privilege Escalation Part&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&quot;../assets/images/TryHackMe%20Daily-Bugle%20Writeup%2061677ca18463452e976210f1c3912efd/Untitled%2017.png&quot; alt=&quot;Untitled&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Check &lt;strong&gt;jjameson&lt;/strong&gt; user &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sudo&lt;/code&gt; permissions.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;../assets/images/TryHackMe%20Daily-Bugle%20Writeup%2061677ca18463452e976210f1c3912efd/Untitled%2018.png&quot; alt=&quot;Untitled&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;jjameson&lt;/strong&gt; can use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sudo&lt;/code&gt; with “&lt;strong&gt;/usr/bin/yum”.&lt;/strong&gt; Go to GTFOBINS and search “&lt;strong&gt;/usr/bin/yum&lt;/strong&gt;”.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;../assets/images/TryHackMe%20Daily-Bugle%20Writeup%2061677ca18463452e976210f1c3912efd/Untitled%2019.png&quot; alt=&quot;Untitled&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;../assets/images/TryHackMe%20Daily-Bugle%20Writeup%2061677ca18463452e976210f1c3912efd/Untitled%2020.png&quot; alt=&quot;Untitled&quot; /&gt;&lt;/p&gt;
+
+&lt;h1 id=&quot;thank-you-for-reading-&quot;&gt;THANK YOU FOR READING 🙂&lt;/h1&gt;
+</description>
+        <pubDate>Mon, 05 Dec 2022 00:00:00 +0300</pubDate>
+        <link>http://localhost:4000/TryHackMe-Daily-Bugle/</link>
+        <guid isPermaLink="true">http://localhost:4000/TryHackMe-Daily-Bugle/</guid>
+        
+        <category>red</category>
+        
+        <category>yellow</category>
+        
+        
+        <category>TryHackMe</category>
+        
+        <category>CTF</category>
+        
+        <category>Writeup</category>
+        
+      </item>
     
       <item>
         <title>TryHackMe: Steel Mountain CTF Writeup</title>
