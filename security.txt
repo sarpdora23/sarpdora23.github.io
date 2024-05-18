@@ -1,4 +1,3 @@
-
 # sarpdora23.github.io Vulnerability Disclosure
 Contact: https://srs.securityforeveryone.com/sarpdora23.github.io/report
 Acknowledgments: https://srs.securityforeveryone.com/sarpdora23.github.io
