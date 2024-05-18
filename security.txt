@@ -1,0 +1,6 @@
+
+# sarpdora23.github.io Vulnerability Disclosure
+Contact: https://srs.securityforeveryone.com/sarpdora23.github.io/report
+Acknowledgments: https://srs.securityforeveryone.com/sarpdora23.github.io
+Preferred-Languages: en
+#s4e-verify-token: a9d3234d1c4db4dbdd9f088d573f93b4
