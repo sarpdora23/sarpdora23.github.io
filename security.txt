@@ -2,4 +2,4 @@
 Contact: https://srs.securityforeveryone.com/sarpdora23.github.io/report
 Acknowledgments: https://srs.securityforeveryone.com/sarpdora23.github.io
 Preferred-Languages: en
-#s4e-verify-token: 0f1739e9d7d3670f78f43da93b2a067b
+#s4e-verify-token: a06ff48c023e450ac2b05708af4575e1
